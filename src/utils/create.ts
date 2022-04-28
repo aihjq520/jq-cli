@@ -43,3 +43,24 @@ export async function getK8SInfo() {
 
   return { namespace: namespace.namespace, port: port.port };
 }
+
+export async function getBranch() {
+  enum TemplateType { H5 = 'h5', Main = 'admin' }
+  const map = {
+    [TemplateType.H5]: 'main',
+    [TemplateType.Main]: 'admin-template'
+  }
+  const info = await inquirer.prompt<{ branch: TemplateType }>([
+    {
+      type: 'list',
+      name: 'branch',
+      message: 'Which template do you want to create?',
+      choices: [
+        TemplateType.H5,
+        // 'web',
+        TemplateType.Main
+      ],
+    },
+  ]);
+  return map[info.branch];
+}

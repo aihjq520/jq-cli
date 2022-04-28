@@ -1,7 +1,7 @@
 
 import { isExistFolder } from '../utils/common';
 import * as shell from 'shelljs'
-import { changeCiConfigInfo, changePackageInfo, getK8SInfo } from '../utils/create';
+import { changeCiConfigInfo, changePackageInfo, getBranch, getK8SInfo} from '../utils/create';
 import fse from 'fs'
 import ora from 'ora';
 import chalk =  require('chalk')
@@ -11,22 +11,23 @@ import path = require('path');
 const create = async(name :string)=>{
     isExistFolder(name)
     const k8sInfo = await getK8SInfo()
+    const branch  = await getBranch()
     shell.exec(`mkdir ${name}`)
     shell.cd(name);
-    downloadTemplate()
+    downloadTemplate(branch)
     moveFile()
     changePackageInfo(name)
     changeCiConfigInfo(name,k8sInfo);
     // initProject()
 }
 
-const downloadTemplate =async ()=>{
+const downloadTemplate =async (branch: string)=>{
     // log.info("开始下载模板");
     //git模块的地址
     const dlSpinner = ora(chalk.cyan('Downloading template...'))
     try{
         dlSpinner.start()
-        execSync("git clone git@newgitlab.com:pro-frontend/base-template.git", {cwd: process.cwd(), // path to where you want to save the file
+        execSync(`git clone -b ${branch} git@newgitlab.com:pro-frontend/base-template.git`, {cwd: process.cwd(), // path to where you want to save the file
     });
     } catch (err){
         dlSpinner.text = chalk.red(`Download template failed. ${err}`)
