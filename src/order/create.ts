@@ -1,7 +1,7 @@
 
 import { isExistFolder } from '../utils/common';
 import * as shell from 'shelljs'
-import { changeCiConfigInfo, changePackageInfo, getBranch, getK8SInfo} from '../utils/create';
+import { changeCiConfigInfo, changeDeployInfo, changePackageInfo, getBranch, getK8SInfo} from '../utils/create';
 import fse from 'fs'
 import ora from 'ora';
 import chalk =  require('chalk')
@@ -18,6 +18,7 @@ const create = async(name :string)=>{
     moveFile()
     changePackageInfo(name)
     changeCiConfigInfo(name,k8sInfo);
+    changeDeployInfo(name,k8sInfo)
     // initProject()
 }
 

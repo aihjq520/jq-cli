@@ -24,6 +24,15 @@ export function changeCiConfigInfo(name: string, info: ChangeCiType): void {
   fs.writeFileSync("./.gitlab-ci.yml", content);
 }
 
+export function changeDeployInfo(name: string, info: ChangeCiType): void {
+  let content = String(fs.readFileSync("./config/deploy.yaml"));
+  const { namespace } = info;
+  content = content
+    .replace(/_projectName/g, name)
+    .replace(/_namespace/g, namespace)
+  fs.writeFileSync("./config/deploy.yaml", content);
+}
+
 export async function getK8SInfo() {
   const namespace = await inquirer.prompt<{ namespace: string }>([
     {
